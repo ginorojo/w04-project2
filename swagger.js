@@ -21,24 +21,17 @@ const doc = {
     produces: ['application/json'],
     definitions: {
         Expense: {
-            type: 'object',
-            required: ['title', 'amount', 'category', 'date', 'provider', 'paymentMethod', 'status', 'notes'],
-            properties: {
-                title: { type: 'string' },
-                amount: { type: 'number' },
-                category: { type: 'string' },
-                date: { type: 'string', format: 'date-time' },
-                provider: { type: 'string' },
-                paymentMethod: { type: 'string' },
-                status: { type: 'string' },
-                notes: { type: 'string' }
-            }
+            title: 'Lunch with client',
+            amount: 24.5,
+            category: 'Food',
+            date: '2026-05-28T12:30:00.000Z',
+            provider: 'Uber Eats',
+            paymentMethod: 'Credit Card',
+            status: 'Paid',
+            notes: 'Sample expense used in Swagger UI'
         },
         MessageResponse: {
-            type: 'object',
-            properties: {
-                message: { type: 'string' }
-            }
+            message: 'Expense deleted successfully.'
         }
     }
 };
