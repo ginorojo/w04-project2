@@ -5,6 +5,8 @@ const session = require('express-session');
 const passport = require('passport');
 const swaggerUi = require('swagger-ui-express');
 const dotenv = require('dotenv');
+const fs = require('fs');
+const path = require('path');
 
 const connectDB = require('./config/db');
 const configurePassport = require('./config/passport');
@@ -31,23 +33,27 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-let swaggerDocument = {};
+const swaggerFilePath = path.join(__dirname, 'swagger.json');
 
-try {
-    swaggerDocument = require('./swagger.json');
-} catch (error) {
-    swaggerDocument = {
-        swagger: '2.0',
-        info: {
-            title: 'Expense API',
-            description: 'Ejecuta npm run swagger para generar swagger.json.'
-        },
-        paths: {}
-    };
-}
+const loadSwaggerDocument = () => {
+    try {
+        const swaggerFile = fs.readFileSync(swaggerFilePath, 'utf8');
+        return JSON.parse(swaggerFile);
+    } catch (error) {
+        return {
+            swagger: '2.0',
+            info: {
+                title: 'Expense API',
+                description: 'Ejecuta npm run swagger para generar swagger.json.'
+            },
+            paths: {}
+        };
+    }
+};
 
 // Documentation served at /api-docs with swagger-ui-express.
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve);
+app.get('/api-docs', (req, res, next) => swaggerUi.setup(loadSwaggerDocument())(req, res, next));
 
 app.get('/', (req, res) => {
     res.json({ message: 'Expense REST API is running.' });

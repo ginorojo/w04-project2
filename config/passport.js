@@ -3,11 +3,17 @@ const User = require('../models/User');
 
 // GitHub OAuth 2.0 configuration to store the user in MongoDB.
 const configurePassport = (passport) => {
+    const defaultBaseUrl = `http://localhost:${process.env.PORT || 3000}`;
+    const configuredBaseUrl = process.env.RENDER_EXTERNAL_URL || process.env.HOST || defaultBaseUrl;
+    const normalizedBaseUrl = /^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(configuredBaseUrl)
+        ? configuredBaseUrl
+        : `http://${configuredBaseUrl}`;
+
     passport.use(new GitHubStrategy(
         {
             clientID: process.env.GITHUB_CLIENT_ID,
             clientSecret: process.env.GITHUB_CLIENT_SECRET,
-            callbackURL: `${process.env.HOST || 'http://localhost:3000'}/github/callback`
+            callbackURL: `${normalizedBaseUrl}/github/callback`
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
