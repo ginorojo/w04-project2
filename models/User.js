@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Colección 1: User para OAuth vía GitHub.
+// Collection 1: User for GitHub OAuth.
 const userSchema = new mongoose.Schema({
     githubId: { type: String, required: true },
     username: { type: String, required: true },

@@ -3,7 +3,7 @@ const passport = require('passport');
 
 const router = express.Router();
 
-// Rutas OAuth pedidas: /login, /github/callback y /logout.
+// Required OAuth routes: /login, /github/callback, and /logout.
 router.get('/login', passport.authenticate('github', { scope: ['user:email'] }));
 
 router.get(
@@ -21,7 +21,7 @@ router.get('/logout', (req, res, next) => {
         }
 
         req.session.destroy(() => {
-            res.json({ message: 'Sesión cerrada correctamente.' });
+            res.json({ message: 'Session closed successfully.' });
         });
     });
 });

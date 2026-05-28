@@ -1,15 +1,15 @@
 const { body, validationResult } = require('express-validator');
 
-// Reglas exclusivas para POST y PUT de Expense.
+// Validation rules exclusively for POST and PUT Expense routes.
 const expenseValidationRules = [
-    body('title').trim().notEmpty().withMessage('El título es requerido.').isString().withMessage('El título debe ser texto.'),
-    body('amount').notEmpty().withMessage('El monto es requerido.').isNumeric().withMessage('El monto debe ser un número.'),
-    body('category').trim().notEmpty().withMessage('La categoría es requerida.').isString().withMessage('La categoría debe ser texto.'),
-    body('date').notEmpty().withMessage('La fecha es requerida.').isISO8601().withMessage('Debe ser una fecha válida.'),
-    body('provider').trim().notEmpty().withMessage('El proveedor es requerido.').isString().withMessage('El proveedor debe ser texto.'),
-    body('paymentMethod').trim().notEmpty().withMessage('El método de pago es requerido.').isString().withMessage('El método de pago debe ser texto.'),
-    body('status').trim().notEmpty().withMessage('El estado es requerido.').isString().withMessage('El estado debe ser texto.'),
-    body('notes').trim().notEmpty().withMessage('Las notas son requeridas.').isString().withMessage('Las notas deben ser texto.')
+    body('title').trim().notEmpty().withMessage('Title is required.').isString().withMessage('Title must be text.'),
+    body('amount').notEmpty().withMessage('Amount is required.').isNumeric().withMessage('Amount must be a number.'),
+    body('category').trim().notEmpty().withMessage('Category is required.').isString().withMessage('Category must be text.'),
+    body('date').notEmpty().withMessage('Date is required.').isISO8601().withMessage('Date must be valid.'),
+    body('provider').trim().notEmpty().withMessage('Provider is required.').isString().withMessage('Provider must be text.'),
+    body('paymentMethod').trim().notEmpty().withMessage('Payment method is required.').isString().withMessage('Payment method must be text.'),
+    body('status').trim().notEmpty().withMessage('Status is required.').isString().withMessage('Status must be text.'),
+    body('notes').trim().notEmpty().withMessage('Notes are required.').isString().withMessage('Notes must be text.')
 ];
 
 const validateExpense = (req, res, next) => {
@@ -19,7 +19,7 @@ const validateExpense = (req, res, next) => {
         return next();
     }
 
-    // Devuelve 400 si hay errores de validación en Expense.
+    // Returns 400 when Expense validation fails.
     return res.status(400).json({ errors: errors.array() });
 };
 

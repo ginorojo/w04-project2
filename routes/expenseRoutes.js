@@ -5,7 +5,7 @@ const { isAuthenticated } = require('../middleware/authenticate');
 
 const router = express.Router();
 
-// GET públicos y POST/PUT/DELETE protegidos solo para Expense.
+// Public GET routes and protected POST/PUT/DELETE routes for Expense only.
 router.get('/', /* #swagger.tags = ['Expense'] */ expenseController.getAllExpenses);
 router.get('/:id', /* #swagger.tags = ['Expense'] */ expenseController.getExpenseById);
 router.post(
@@ -13,7 +13,7 @@ router.post(
     /* #swagger.tags = ['Expense'] */
     /* #swagger.parameters['body'] = {
         in: 'body',
-        description: 'Datos del gasto',
+        description: 'Expense data',
         required: true,
         schema: { $ref: '#/definitions/Expense' }
     } */
@@ -27,13 +27,13 @@ router.put(
     /* #swagger.tags = ['Expense'] */
     /* #swagger.parameters['id'] = {
         in: 'path',
-        description: 'ID del gasto',
+        description: 'Expense ID',
         required: true,
         type: 'string'
     } */
     /* #swagger.parameters['body'] = {
         in: 'body',
-        description: 'Datos actualizados del gasto',
+        description: 'Updated expense data',
         required: true,
         schema: { $ref: '#/definitions/Expense' }
     } */
@@ -47,7 +47,7 @@ router.delete(
     /* #swagger.tags = ['Expense'] */
     /* #swagger.parameters['id'] = {
         in: 'path',
-        description: 'ID del gasto',
+        description: 'Expense ID',
         required: true,
         type: 'string'
     } */

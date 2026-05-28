@@ -3,13 +3,13 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// Conexión a MongoDB para las colecciones User y Expense.
+// MongoDB connection for the User and Expense collections.
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
-        console.log('MongoDB conectado exitosamente');
+        console.log('MongoDB connected successfully');
     } catch (error) {
-        console.error('Error al conectar con MongoDB:', error);
+        console.error('Error connecting to MongoDB:', error);
         process.exit(1);
     }
 };

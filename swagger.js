@@ -4,7 +4,7 @@ const swaggerAutogen = require('swagger-autogen')();
 const doc = {
     info: {
         title: 'Expense API',
-        description: 'API REST con CRUD de gastos, validación, Swagger y OAuth GitHub.'
+        description: 'REST API with expense CRUD, validation, Swagger, and GitHub OAuth.'
     },
     host: `localhost:${process.env.PORT || 3000}`,
     schemes: ['http'],
@@ -15,5 +15,5 @@ const doc = {
 const outputFile = './swagger.json';
 const endpointsFiles = ['./server.js', './routes/expenseRoutes.js', './routes/authRoutes.js'];
 
-// Genera swagger.json a partir de los endpoints del proyecto.
+// Generates swagger.json from the project endpoints.
 swaggerAutogen(outputFile, endpointsFiles, doc);

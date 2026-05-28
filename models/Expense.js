@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Colección 2: Expense con los campos obligatorios de la rúbrica.
+// Collection 2: Expense with the required rubric fields.
 const expenseSchema = new mongoose.Schema({
     title: { type: String, required: true },
     amount: { type: Number, required: true },

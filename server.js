@@ -17,7 +17,7 @@ configurePassport(passport);
 
 const app = express();
 
-// Middlewares base pedidos por la rúbrica.
+// Base middleware required by the rubric.
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -46,11 +46,11 @@ try {
     };
 }
 
-// Documentación servida en /api-docs con swagger-ui-express.
+// Documentation served at /api-docs with swagger-ui-express.
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => {
-    res.json({ message: 'API REST de gastos activa.' });
+    res.json({ message: 'Expense REST API is running.' });
 });
 
 app.use('/', authRoutes);
@@ -59,5 +59,5 @@ app.use('/expenses', expenseRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });

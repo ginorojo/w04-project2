@@ -1,7 +1,7 @@
 const { Strategy: GitHubStrategy } = require('passport-github2');
 const User = require('../models/User');
 
-// Configuración OAuth 2.0 con GitHub para guardar el usuario en MongoDB.
+// GitHub OAuth 2.0 configuration to store the user in MongoDB.
 const configurePassport = (passport) => {
     passport.use(new GitHubStrategy(
         {
