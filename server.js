@@ -51,9 +51,10 @@ const loadSwaggerDocument = () => {
     }
 };
 
+const swaggerDocument = loadSwaggerDocument();
+
 // Documentation served at /api-docs with swagger-ui-express.
-app.use('/api-docs', swaggerUi.serve);
-app.get('/api-docs', (req, res, next) => swaggerUi.setup(loadSwaggerDocument())(req, res, next));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => {
     res.json({ message: 'Expense REST API is running.' });

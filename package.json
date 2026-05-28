@@ -4,8 +4,9 @@
   "description": "API REST Node.js, Express, MongoDB, OAuth y Swagger",
   "main": "server.js",
   "scripts": {
+    "prestart": "node swagger.js",
     "start": "node server.js",
-    "dev": "node server.js",
+    "dev": "node swagger.js && node server.js",
     "swagger": "node swagger.js"
   },
   "dependencies": {
