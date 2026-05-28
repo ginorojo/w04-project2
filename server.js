@@ -12,59 +12,69 @@ const connectDB = require('./config/db');
 const configurePassport = require('./config/passport');
 const expenseRoutes = require('./routes/expenseRoutes');
 const authRoutes = require('./routes/authRoutes');
+const generateSwagger = require('./swagger');
 
 dotenv.config();
-connectDB();
-configurePassport(passport);
 
-const app = express();
+const startServer = async () => {
+    await generateSwagger();
+    connectDB();
+    configurePassport(passport);
 
-// Base middleware required by the rubric.
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-    session({
-        secret: process.env.SESSION_SECRET || 'session_secret',
-        resave: false,
-        saveUninitialized: false
-    })
-);
-app.use(passport.initialize());
-app.use(passport.session());
+    const app = express();
 
-const swaggerFilePath = path.join(__dirname, 'swagger.json');
+    // Base middleware required by the rubric.
+    app.use(cors());
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(
+        session({
+            secret: process.env.SESSION_SECRET || 'session_secret',
+            resave: false,
+            saveUninitialized: false
+        })
+    );
+    app.use(passport.initialize());
+    app.use(passport.session());
 
-const loadSwaggerDocument = () => {
-    try {
-        const swaggerFile = fs.readFileSync(swaggerFilePath, 'utf8');
-        return JSON.parse(swaggerFile);
-    } catch (error) {
-        return {
-            swagger: '2.0',
-            info: {
-                title: 'Expense API',
-                description: 'Ejecuta npm run swagger para generar swagger.json.'
-            },
-            paths: {}
-        };
-    }
+    const swaggerFilePath = path.join(__dirname, 'swagger.json');
+
+    const loadSwaggerDocument = () => {
+        try {
+            const swaggerFile = fs.readFileSync(swaggerFilePath, 'utf8');
+            return JSON.parse(swaggerFile);
+        } catch (error) {
+            return {
+                swagger: '2.0',
+                info: {
+                    title: 'Expense API',
+                    description: 'Ejecuta npm run swagger para generar swagger.json.'
+                },
+                paths: {}
+            };
+        }
+    };
+
+    const swaggerDocument = loadSwaggerDocument();
+
+    // Documentation served at /api-docs with swagger-ui-express.
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+    app.get('/', (req, res) => {
+        res.json({ message: 'Expense REST API is running.' });
+    });
+
+    app.use('/', authRoutes);
+    app.use('/expenses', expenseRoutes);
+
+    const PORT = process.env.PORT || 3000;
+
+    app.listen(PORT, () => {
+        console.log(`Server running at http://localhost:${PORT}`);
+    });
 };
 
-const swaggerDocument = loadSwaggerDocument();
-
-// Documentation served at /api-docs with swagger-ui-express.
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-app.get('/', (req, res) => {
-    res.json({ message: 'Expense REST API is running.' });
-});
-
-app.use('/', authRoutes);
-app.use('/expenses', expenseRoutes);
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+startServer().catch((error) => {
+    console.error('Failed to start server:', error);
+    process.exit(1);
 });

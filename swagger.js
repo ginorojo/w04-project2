@@ -22,5 +22,10 @@ const doc = {
 const outputFile = './swagger.json';
 const endpointsFiles = ['./server.js', './routes/expenseRoutes.js', './routes/authRoutes.js'];
 
-// Generates swagger.json from the project endpoints.
-swaggerAutogen(outputFile, endpointsFiles, doc);
+const generateSwagger = () => swaggerAutogen(outputFile, endpointsFiles, doc);
+
+module.exports = generateSwagger;
+
+if (require.main === module) {
+    generateSwagger();
+}
