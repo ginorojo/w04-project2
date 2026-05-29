@@ -12,6 +12,13 @@ const expenseValidationRules = [
     body('notes').trim().notEmpty().withMessage('Notes are required.').isString().withMessage('Notes must be text.')
 ];
 
+const providerValidationRules = [
+    body('name').trim().notEmpty().withMessage('Name is required.').isString().withMessage('Name must be text.'),
+    body('contactEmail').trim().notEmpty().withMessage('Contact email is required.').isEmail().withMessage('Contact email must be valid.'),
+    body('serviceType').trim().notEmpty().withMessage('Service type is required.').isString().withMessage('Service type must be text.'),
+    body('isActive').optional().isBoolean().withMessage('isActive must be a boolean.')
+];
+
 const validateExpense = (req, res, next) => {
     const errors = validationResult(req);
 
@@ -23,4 +30,15 @@ const validateExpense = (req, res, next) => {
     return res.status(400).json({ errors: errors.array() });
 };
 
-module.exports = { expenseValidationRules, validateExpense };
+const validateProvider = (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (errors.isEmpty()) {
+        return next();
+    }
+
+    // Returns 400 when Provider validation fails.
+    return res.status(400).json({ errors: errors.array() });
+};
+
+module.exports = { expenseValidationRules, validateExpense, providerValidationRules, validateProvider };

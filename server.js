@@ -11,6 +11,7 @@ const path = require('path');
 const connectDB = require('./config/db');
 const configurePassport = require('./config/passport');
 const expenseRoutes = require('./routes/expenseRoutes');
+const providerRoutes = require('./routes/providerRoutes');
 const authRoutes = require('./routes/authRoutes');
 const generateSwagger = require('./swagger');
 
@@ -37,9 +38,9 @@ const startServer = async () => {
     app.use(passport.initialize());
     app.use(passport.session());
 
-const swaggerFilePath = path.join(__dirname, 'swagger.json');
+    const swaggerFilePath = path.join(__dirname, 'swagger.json');
 
-const loadSwaggerDocument = () => {
+    const loadSwaggerDocument = () => {
         try {
             const swaggerFile = fs.readFileSync(swaggerFilePath, 'utf8');
             return JSON.parse(swaggerFile);
@@ -52,24 +53,24 @@ const loadSwaggerDocument = () => {
                 },
                 paths: {}
             };
-    }
-};
+        }
+    };
 
-// Documentation served at /api-docs with swagger-ui-express.
-const swaggerUiOptions = {
-    swaggerOptions: {
-        url: '/swagger.json'
-    }
-};
+    // Documentation served at /api-docs with swagger-ui-express.
+    const swaggerUiOptions = {
+        swaggerOptions: {
+            url: '/swagger.json'
+        }
+    };
 
-app.get('/swagger.json', (req, res) => {
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-    res.json(loadSwaggerDocument());
-});
+    app.get('/swagger.json', (req, res) => {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+        res.json(loadSwaggerDocument());
+    });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, swaggerUiOptions));
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, swaggerUiOptions));
 
     app.get('/', (req, res) => {
         res.json({ message: 'Expense REST API is running.' });
@@ -77,6 +78,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, swaggerUiOptions));
 
     app.use('/', authRoutes);
     app.use('/expenses', expenseRoutes);
+    app.use('/providers', providerRoutes);
 
     const PORT = process.env.PORT || 3000;
 

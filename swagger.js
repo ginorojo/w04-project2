@@ -30,8 +30,17 @@ const doc = {
             status: 'Paid',
             notes: 'Sample expense used in Swagger UI'
         },
+        Provider: {
+            name: 'Fast Delivery Express',
+            contactEmail: 'logistics@fastdelivery.com',
+            serviceType: 'Shipping',
+            isActive: true
+        },
         MessageResponse: {
             message: 'Expense deleted successfully.'
+        },
+        ProviderMessageResponse: {
+            message: 'Provider deleted successfully.'
         }
     }
 };
@@ -45,7 +54,7 @@ const cleanupSwaggerDocument = () => {
     try {
         const swaggerDocument = JSON.parse(fs.readFileSync(swaggerFilePath, 'utf8'));
 
-        if (swaggerDocument.paths && swaggerDocument.paths['/expenses/{id}'] && swaggerDocument.paths['/{id}']) {
+        if (swaggerDocument.paths && swaggerDocument.paths['/{id}']) {
             delete swaggerDocument.paths['/{id}'];
             fs.writeFileSync(swaggerFilePath, `${JSON.stringify(swaggerDocument, null, 2)}\n`);
         }
